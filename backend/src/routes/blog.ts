@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { initPrismaMiddleware, initJwtMiddleware } from "../middleware";
 import { PrismaClient } from "@prisma/client/extension";
 import { Bindings, Variables } from "hono/types";
-
+import { createPostInput, updatePostInput } from "@vinay-npm/common";
 export const blogRouter = new Hono<{
 	Bindings: Bindings;
 	Variables: Variables;
@@ -22,6 +22,12 @@ blogRouter.post("/", async (c) => {
 
 	// Getting Body
 	const body = await c.req.json();
+    const {success} = createPostInput.safeParse(body)
+    if(!success){
+        return c.json({
+          msg : "Invalid input...!"
+        },403)
+    }
 
 	// @ts-ignore
 	const res = await prisma.post.create({
@@ -36,13 +42,20 @@ blogRouter.post("/", async (c) => {
 	return c.json(res); // Return user ID for verification
 });
 
-blogRouter.put("", async (c) => {
+blogRouter.put("/", async (c) => {
 	// @ts-ignore
 	const userId = c.get("userId");
 	// @ts-ignore
 	const prisma = c.get("prisma");
 
     const body = await c.req.json();
+    const  {success} = updatePostInput.safeParse(body);
+    if(!success){
+        return c.json({
+          msg : "Invalid input...!"
+        },403)
+    }
+    
     // @ts-ignore
     const res = await prisma.post.update({
         where : {

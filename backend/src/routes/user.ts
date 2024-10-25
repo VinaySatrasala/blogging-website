@@ -4,6 +4,7 @@ import { Hono } from "hono";
 import { sign } from "hono/jwt";
 import { initPrismaMiddleware } from "../middleware";
 import { Bindings , Variables } from "../types";
+import { signinInput , signupInput } from "@vinay-npm/common";
 
 
 
@@ -16,7 +17,13 @@ userRouter.use('*', initPrismaMiddleware);
 userRouter.post('/signup', async (c) => {
   const prisma = c.get('prisma');
   const body = await c.req.json();
-
+  const {success} = signupInput.safeParse(body);
+  console.log(success);
+  if(!success){
+    return c.json({
+      msg : "Invalid input...!"
+    },403)
+  }
   let uid: any;
   try {
     uid = await prisma.user.create({
@@ -44,8 +51,11 @@ userRouter.post('/signin', async (c) => {
   const prisma = c.get('prisma');
   const body = await c.req.json();
 
-  if (!body.email || !body.password) {
-    return c.json({ msg: 'Email and password required' }, 400);
+  const {success} = signinInput.safeParse(body);
+  if(!success){
+    return c.json({
+      msg : "Invalid input...!"
+    },403)
   }
 
   const user = await prisma.user.findUnique({
