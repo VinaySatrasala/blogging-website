@@ -15,8 +15,9 @@ export const initPrismaMiddleware = async (c: Context, next: Next) => {
 
 export const initJwtMiddleware = async (c: Context, next: Next) => {
 	const jwt = c.req.header("Authorization");
+	console.log(c.req.header)
 	if (!jwt) {
-		return c.json({ msg: "Unauthorized" }, 401);
+		return c.json({ msg: "Unauthorizednfbfdbdmf" }, 401);
 	}
 	const token = jwt.split(" ")[1];
 	let payload: any;

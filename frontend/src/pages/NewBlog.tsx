@@ -1,29 +1,37 @@
 import { useState } from "react";
 import { MoreHorizontal, Plus } from "lucide-react";
+import axios from "axios";
+import { BACKEND_URL } from "../config";
+import { useNavigate } from "react-router-dom";
 
 export const NewBlog = () => {
 	const [title, setTitle] = useState("");
 	const [content, setContent] = useState("");
-
+	const navigate = useNavigate();
 	return (
 		<div className="min-h-screen bg-white text-gray-800">
-			<header className="flex items-center justify-between p-4 border-b border-gray-200">
-				<div className="flex items-center space-x-2">
-					<span className="text-md font-medium">
-						Write your Blog...!
-					</span>
-				</div>
-				<div className="flex items-center space-x-4">
-					<button className="bg-green-600 hover:bg-green-700 text-white rounded-full px-4 py-1 text-sm">
-						Publish
-					</button>
-					<button>
-						<div className="bg-gray-100 w-9 h-9 rounded-full text-center">
-							<h1 className="text-2xl font-bold">J</h1>
-						</div>
-					</button>
-				</div>
-			</header>
+			<div className="text-right m-5 mr-10">
+				<button
+					className="bg-green-600 hover:bg-green-700 text-white rounded-full px-4 py-1 text-sm"
+					onClick={()=>{
+						axios.post(`${BACKEND_URL}/blog`,{
+							title,content
+						},
+							{
+								headers : {
+									Authorization : "Bearer "+localStorage.getItem("jwt")
+								}
+							}
+						)
+							.then((response) => {
+								console.log(response.data)
+							})
+						navigate("/blogs");
+					}}
+				>
+					Publish
+				</button>
+			</div>
 			<main className="container mx-auto mt-8 px-4 max-w-3xl">
 				<div className="relative mb-4">
 					<input

@@ -22,6 +22,7 @@ blogRouter.post("/", async (c) => {
 
 	// Getting Body
 	const body = await c.req.json();
+    console.log(body)
     const {success} = createPostInput.safeParse(body)
     if(!success){
         return c.json({
@@ -79,21 +80,42 @@ blogRouter.get("/id/:id", async (c) => {
     const id = c.req.param("id");
     console.log(id)
     // @ts-ignore
-    const res = await prisma.post.findUnique({
-        where : {
+    const res = await prisma.post.findMany({
+        where :{
             id : id
+        },
+        select : {
+            title : true,
+            content : true,
+            id : true,
+            author : {
+                select :{ 
+                    name : true
+                }
+            }
         }
-    })
-	return c.json(res);
+    });
+	return c.json(res[0]);
 });
 
-blogRouter.get("bulk", async (c) => {
+blogRouter.get("/bulk", async (c) => {
     // @ts-ignore
     const prisma = c.get("prisma");
     
     try {
         // @ts-ignore
-        const res = await prisma.post.findMany();
+        const res = await prisma.post.findMany({
+            select : {
+                title : true,
+                content : true,
+                id : true,
+                author : {
+                    select :{ 
+                        name : true
+                    }
+                }
+            }
+        });
         return c.json(res);
     } catch (error) {
         console.error(error);
