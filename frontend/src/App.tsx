@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import {Signup} from './pages/Signup'
 import {Signin} from './pages/Signin'
 import {Blog} from './pages/Blog'
@@ -9,7 +8,6 @@ import { Blogs } from './pages/Blogs'
 import { AppBar } from './Compoents/AppBar'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>

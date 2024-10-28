@@ -25,7 +25,7 @@ export const Signup = () => {
 				alert(res.data.msg);
 				return;
 			}
-			navigate("/blog")
+			navigate("/blogs")
 		}catch(e:any){
 			alert(e.response.data.msg);
 		}
