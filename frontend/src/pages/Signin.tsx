@@ -17,7 +17,7 @@ export const Signin = () => {
 			const res = await axios.post(`${BACKEND_URL}/user/signin`,postInputs)
 			const jwt = res.data.token;
 			localStorage.setItem("jwt",jwt)
-			navigate("/blog")
+			navigate("/blogs")
 		} catch (e : any) {
 			alert(e.response.data.msg);
 		}
