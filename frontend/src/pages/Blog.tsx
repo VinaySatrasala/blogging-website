@@ -24,7 +24,7 @@ export const Blog = () => {
 				</h2>
 				<p className="ml-2">{blog.content}</p>
 			</div>
-			<div className="pt-10 ml-10 w-screen cols-span-4">
+			<div className="pt-10 ml-10 col-span-4">
 				<Author name={blog.author?.name || "Unknown"} desc="Master of mirth" />
 			</div>
 		</div>
